@@ -91,7 +91,6 @@ const els = {
 
   status: document.getElementById("status"),
   puzzleNumber: document.getElementById("puzzle-number"),
-  instructions: document.getElementById("instructions"),
 
   clearBtn: document.getElementById("clear-btn"),
   shareBtn: document.getElementById("share-btn"),
@@ -522,15 +521,11 @@ function render() {
     els.puzzleNumber.textContent = `${label} • ${dateLabel}`;
   }
 
-  if (isBonusMode()) {
-    els.instructions.textContent =
-      "Fill the operator slots as quickly as you can. Mirrored placements happen automatically.";
-    renderBonus();
-  } else {
-    els.instructions.textContent =
-      "Arrange each group of digits so both sides are equal.";
-    renderMainModes();
-  }
+if (isBonusMode()) {
+  renderBonus();
+} else {
+  renderMainModes();
+}
 
   if (state.solved) {
     if (isBonusMode() && state.elapsedMs !== null) {
