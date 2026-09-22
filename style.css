@@ -1,0 +1,1325 @@
+/* =========================================================
+   GLOBAL VARIABLES
+   ========================================================= */
+
+:root {
+  --bg: #f6f4ef;
+  --card: #ffffff;
+
+  --text: #1f2529;
+  --muted: #6f777c;
+
+  --line: #d9dde0;
+  --slot-bg: #f9fafb;
+
+  --accent: #2d6a4f;
+  --accent-dark: #1f513c;
+
+  --success-bg: #e8f5ec;
+  --success-text: #1f6b42;
+
+  --error-bg: #fff0ed;
+  --error-text: #9d3d2f;
+
+  --selected-bg: #fff2bf;
+  --selected-line: #c89b17;
+}
+
+/* =========================================================
+   RESET / BASE
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.app-shell {
+  width: min(980px, 100%);
+  margin: 0 auto;
+
+  padding: 28px 16px 48px;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.game-header {
+  text-align: center;
+
+  margin-bottom: 22px;
+}
+
+h1 {
+  margin: 5px 0 4px;
+
+  font-size: clamp(1.8rem, 5vw, 2.7rem);
+  line-height: 1;
+}
+
+.instructions {
+  margin: 10px auto 0;
+
+  color: var(--muted);
+
+  font-size: 0.98rem;
+}
+
+/* =========================================================
+   MODE SWITCHER
+   ========================================================= */
+
+.mode-switcher {
+  display: inline-flex;
+
+  gap: 4px;
+
+  margin-top: 16px;
+  padding: 4px;
+
+  background: #ecefed;
+
+  border-radius: 12px;
+}
+
+.mode-btn {
+  min-width: 112px;
+
+  border: 0;
+
+  padding: 8px 12px;
+
+  background: transparent;
+  color: var(--muted);
+
+  border-radius: 9px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+}
+
+/*
+  The checkmark always occupies space, even when invisible.
+  That prevents the tab from changing size on completion.
+*/
+
+.mode-btn::after {
+  content: "✓";
+
+  width: 14px;
+
+  color: var(--success-text);
+
+  opacity: 0;
+}
+
+.mode-btn.completed::after {
+  opacity: 1;
+}
+
+.mode-btn.active {
+  background: #ffffff;
+  color: var(--text);
+
+  box-shadow: 0 1px 4px rgba(31, 37, 41, 0.12);
+}
+
+/* =========================================================
+   GAME CARD
+   ========================================================= */
+
+.game-card {
+  background: var(--card);
+
+  border: 1px solid var(--line);
+  border-radius: 22px;
+
+  padding: clamp(18px, 4vw, 34px);
+
+  box-shadow: 0 10px 35px rgba(31, 37, 41, 0.08);
+}
+
+.puzzle-number {
+  min-height: 20px;
+
+  margin-bottom: 22px;
+
+  text-align: center;
+
+  color: var(--muted);
+
+  font-size: 0.82rem;
+}
+
+/* =========================================================
+   INITIAL GAME REVEAL
+   ========================================================= */
+
+.game-card.reveal-pending {
+  opacity: 0;
+
+  transform: translateY(8px);
+}
+
+.game-card.initial-reveal {
+  animation: game-card-reveal 380ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes game-card-reveal {
+  from {
+    opacity: 0;
+
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------
+   PUZZLE PIECES
+   --------------------------------------------------------- */
+
+.game-card.initial-reveal
+  :is(.digit-tile, .slot, .operator, .op-slot, .operator-tile, .equals) {
+  opacity: 0;
+
+  animation: puzzle-piece-reveal 220ms ease-out forwards;
+
+  animation-delay: 100ms;
+}
+
+@keyframes puzzle-piece-reveal {
+  from {
+    opacity: 0;
+
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------
+   VERY SHORT STAGGER
+   --------------------------------------------------------- */
+
+.game-card.initial-reveal
+  :is(.expression, .digit-bank, .operator-bank)
+  > :nth-child(1) {
+  animation-delay: 100ms;
+}
+
+.game-card.initial-reveal
+  :is(.expression, .digit-bank, .operator-bank)
+  > :nth-child(2) {
+  animation-delay: 125ms;
+}
+
+.game-card.initial-reveal
+  :is(.expression, .digit-bank, .operator-bank)
+  > :nth-child(3) {
+  animation-delay: 150ms;
+}
+
+.game-card.initial-reveal
+  :is(.expression, .digit-bank, .operator-bank)
+  > :nth-child(4) {
+  animation-delay: 175ms;
+}
+
+.game-card.initial-reveal
+  :is(.expression, .digit-bank, .operator-bank)
+  > :nth-child(5) {
+  animation-delay: 200ms;
+}
+
+.game-card.initial-reveal
+  :is(.expression, .digit-bank, .operator-bank)
+  > :nth-child(6) {
+  animation-delay: 225ms;
+}
+
+.game-card.initial-reveal
+  :is(.expression, .digit-bank, .operator-bank)
+  > :nth-child(7) {
+  animation-delay: 250ms;
+}
+
+/* ---------------------------------------------------------
+   REDUCED MOTION
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .game-card.reveal-pending {
+    opacity: 1;
+
+    transform: none;
+  }
+
+  .game-card.initial-reveal,
+  .game-card.initial-reveal
+    :is(.digit-tile, .slot, .operator, .op-slot, .operator-tile, .equals) {
+    animation: none;
+
+    opacity: 1;
+
+    transform: none;
+  }
+}
+
+/* =========================================================
+   MODE-SPECIFIC SIZING
+   ========================================================= */
+
+/*
+   G3 and G4 use the same cell HEIGHT so the equation
+   does not shift vertically when changing modes.
+*/
+
+.board[data-digits="3"] {
+  --cell-width: 58px;
+  --cell-height: 56px;
+
+  --operator-width: 34px;
+  --operator-size: 2rem;
+}
+
+.board[data-digits="4"] {
+  --cell-width: 52px;
+  --cell-height: 56px;
+
+  --operator-width: 29px;
+  --operator-size: 1.75rem;
+}
+
+/* =========================================================
+   MAIN PUZZLE BOARD
+   ========================================================= */
+
+.board {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto
+    minmax(0, 1fr);
+
+  align-items: end;
+
+  gap: clamp(8px, 2vw, 20px);
+
+  width: 100%;
+
+  /*
+     Room for optional side-value displays.
+  */
+  margin-bottom: 34px;
+}
+
+/* =========================================================
+   LEFT / RIGHT SIDE PANELS
+   ========================================================= */
+
+.side-panel {
+  position: relative;
+
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+/* =========================================================
+   DIGIT BANKS
+   ========================================================= */
+
+.digit-bank {
+  min-height: var(--cell-height);
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: clamp(6px, 1.2vw, 10px);
+}
+
+/* =========================================================
+   DIGIT TILES + NUMBER SLOTS
+   ========================================================= */
+
+.digit-tile,
+.slot {
+  width: var(--cell-width);
+  height: var(--cell-height);
+
+  border-radius: 12px;
+
+  font-size: clamp(1.15rem, 4.5vw, 1.55rem);
+  font-weight: 800;
+}
+
+/* =========================================================
+   DIGIT BANK TILES
+   ========================================================= */
+
+.digit-tile {
+  border: 2px solid #cfd5d8;
+
+  background: #ffffff;
+  color: var(--text);
+
+  cursor: pointer;
+
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.digit-tile:hover {
+  transform: translateY(-1px);
+
+  border-color: #8f9a9f;
+}
+
+/*
+   Used digits stay clickable so they can be returned
+   from the equation to the bank.
+*/
+
+.digit-tile.used {
+  opacity: 0.35;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   SELECTED TILE / SLOT
+   ========================================================= */
+
+.digit-tile.selected,
+.slot.selected,
+.operator-tile.selected {
+  background: var(--selected-bg);
+
+  border-color: var(--selected-line);
+
+  outline: 3px solid rgba(200, 155, 23, 0.18);
+}
+
+/* =========================================================
+   EXPRESSIONS
+   ========================================================= */
+
+.expression {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: clamp(4px, 0.9vw, 8px);
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   NUMBER SLOTS
+   ========================================================= */
+
+.slot {
+  display: inline-grid;
+
+  place-items: center;
+
+  border: 2px solid #bfc7cb;
+
+  background: var(--slot-bg);
+  color: var(--text);
+
+  cursor: pointer;
+
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms ease;
+}
+
+.slot:hover {
+  border-color: #7e8a90;
+}
+
+.slot.filled {
+  background: #ffffff;
+}
+
+.slot.fixed {
+  cursor: default;
+}
+
+/* =========================================================
+   OPERATORS IN DAILY / CHALLENGE
+   ========================================================= */
+
+.operator {
+  min-width: var(--operator-width);
+
+  text-align: center;
+
+  font-size: var(--operator-size);
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+/* =========================================================
+   EQUAL SIGN
+   ========================================================= */
+
+.equals {
+  align-self: end;
+
+  width: auto;
+  height: var(--cell-height);
+
+  display: grid;
+
+  place-items: center;
+
+  padding: 0 2px;
+
+  font-size: 2.45rem;
+  font-weight: 900;
+
+  line-height: 1;
+}
+
+/* =========================================================
+   INCORRECT EQUATION FEEDBACK
+   ========================================================= */
+
+.equals.incorrect {
+  color: var(--error-text);
+
+  animation: incorrect-equality-wiggle 300ms ease-in-out;
+}
+
+@keyframes incorrect-equality-wiggle {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-3px);
+  }
+
+  40% {
+    transform: translateX(3px);
+  }
+
+  60% {
+    transform: translateX(-2px);
+  }
+
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .equals.incorrect {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   OPTIONAL SIDE VALUES
+   ========================================================= */
+
+/*
+   Absolute positioning prevents these values from changing
+   the vertical alignment of the equation or equal sign.
+*/
+
+.side-value {
+  position: absolute;
+
+  top: 100%;
+
+  width: 100%;
+
+  margin-top: 8px;
+
+  text-align: center;
+
+  color: var(--muted);
+
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   BONUS OPERATOR BANK
+   ========================================================= */
+
+.operator-bank-wrap {
+  margin-top: 6px;
+  margin-bottom: 24px;
+
+  text-align: center;
+}
+
+.operator-bank-label {
+  margin-bottom: 8px;
+
+  color: var(--muted);
+
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.operator-bank {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+.operator-tile {
+  min-width: 46px;
+  height: 46px;
+
+  border: 2px solid #cfd5d8;
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: var(--text);
+
+  font-size: 1.4rem;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.operator-tile:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  border-color: #8f9a9f;
+}
+
+.operator-tile.used {
+  opacity: 0.35;
+}
+
+.operator-tile:disabled {
+  opacity: 0.65;
+
+  cursor: default;
+}
+
+/* =========================================================
+   BONUS OPERATOR SLOTS
+   ========================================================= */
+
+.op-slot {
+  width: var(--operator-width);
+  height: var(--cell-height);
+
+  border: 2px dashed #bfc7cb;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: var(--text);
+
+  font-size: var(--operator-size);
+  font-weight: 800;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.op-slot:hover:not(:disabled) {
+  border-color: #7e8a90;
+}
+
+.op-slot:disabled {
+  cursor: default;
+}
+
+/* =========================================================
+   FEEDBACK / START ZONE
+   ========================================================= */
+
+/*
+   The Start button and the status message occupy the SAME
+   reserved space.
+
+   Before Start:
+     Start button appears here.
+
+   During play:
+     This zone is blank.
+
+   After solve:
+     Solved message appears here.
+
+   Therefore the equation never jumps vertically.
+*/
+
+.feedback-zone {
+  display: grid;
+
+  grid-template-columns: 1fr;
+  grid-template-rows: 56px;
+
+  width: min(570px, 100%);
+
+  margin: 18px auto 0;
+}
+
+.feedback-zone > * {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* =========================================================
+   BONUS START BUTTON
+   ========================================================= */
+
+.bonus-controls {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  margin: 0;
+
+  z-index: 2;
+}
+
+.bonus-start-btn {
+  border: 0;
+
+  padding: 11px 28px;
+
+  border-radius: 11px;
+
+  background: var(--accent);
+  color: #ffffff;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 2px 7px rgba(31, 81, 60, 0.18);
+
+  transition:
+    background 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.bonus-start-btn:hover {
+  background: var(--accent-dark);
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 3px 9px rgba(31, 81, 60, 0.22);
+}
+
+/* =========================================================
+   BONUS TIMER
+   ========================================================= */
+
+.bonus-timer {
+  min-width: 70px;
+
+  text-align: center;
+
+  color: var(--muted);
+
+  font-weight: 800;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status {
+  width: 100%;
+  height: 56px;
+
+  margin: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  padding: 8px 12px;
+
+  border-radius: 12px;
+
+  text-align: center;
+
+  font-weight: 700;
+
+  /*
+     Status is informational only.
+     This prevents the blank status element from blocking
+     clicks on the Start button when they occupy the same
+     feedback-zone grid cell.
+  */
+  pointer-events: none;
+}
+
+.status.success {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.status.error {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+/* =========================================================
+   HELP / SHOW VALUES / HINT
+   ========================================================= */
+
+.help-row {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 18px;
+
+  margin-top: 6px;
+}
+
+.toggle-control {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: var(--muted);
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.toggle-control input {
+  width: 18px;
+  height: 18px;
+
+  cursor: pointer;
+}
+
+.hint-btn {
+  border: 1px solid #cbd1d4;
+
+  background: #ffffff;
+  color: var(--text);
+
+  border-radius: 9px;
+
+  padding: 7px 12px;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.hint-btn:hover:not(:disabled) {
+  border-color: #8f9a9f;
+}
+
+.hint-btn:disabled {
+  opacity: 0.55;
+
+  cursor: default;
+
+  border-color: #d9dde0;
+}
+
+.hint-text {
+  min-height: 28px;
+
+  margin-top: 10px;
+
+  text-align: center;
+
+  color: var(--muted);
+
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+/* =========================================================
+   HELP EXPLANATION LINK
+   ========================================================= */
+
+.help-info-btn {
+  border: 0;
+
+  padding: 6px 4px;
+
+  background: transparent;
+  color: var(--muted);
+
+  font-size: 0.88rem;
+  font-weight: 700;
+
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  cursor: pointer;
+}
+
+.help-info-btn:hover {
+  color: var(--text);
+}
+
+/* =========================================================
+   HELP DIALOG
+   ========================================================= */
+
+.help-dialog {
+  width: min(520px, calc(100% - 32px));
+
+  border: 1px solid var(--line);
+  border-radius: 18px;
+
+  padding: 0;
+
+  background: var(--card);
+  color: var(--text);
+
+  box-shadow: 0 18px 60px rgba(31, 37, 41, 0.22);
+}
+
+.help-dialog::backdrop {
+  background: rgba(31, 37, 41, 0.34);
+}
+
+.help-dialog-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  padding: 20px 22px 14px;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.help-dialog-header h2 {
+  margin: 0;
+
+  font-size: 1.25rem;
+}
+
+.dialog-x {
+  width: 34px;
+  height: 34px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: var(--muted);
+
+  font-size: 1.5rem;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.dialog-x:hover {
+  background: #f0f2f3;
+  color: var(--text);
+}
+
+.help-dialog-content {
+  padding: 18px 22px 8px;
+}
+
+.help-dialog-content section {
+  margin-bottom: 18px;
+}
+
+.help-dialog-content h3 {
+  margin: 0 0 5px;
+
+  font-size: 1rem;
+}
+
+.help-dialog-content p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.help-dialog-note {
+  padding-top: 4px;
+
+  font-weight: 700;
+}
+
+.help-dialog-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  padding: 10px 22px 20px;
+}
+
+/* =========================================================
+   MAIN ACTIONS
+   ========================================================= */
+
+.actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-top: 14px;
+}
+
+.secondary-btn {
+  border: 1px solid #cbd1d4;
+
+  background: #ffffff;
+  color: var(--text);
+
+  border-radius: 11px;
+
+  padding: 11px 18px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.secondary-btn:hover {
+  border-color: #8f9a9f;
+}
+
+/* =========================================================
+   PROTOTYPE CONTROLS
+   ========================================================= */
+
+.dev-tools {
+  max-width: 560px;
+
+  margin: 28px auto 0;
+
+  color: var(--muted);
+
+  font-size: 0.86rem;
+}
+
+.dev-tools summary {
+  cursor: pointer;
+
+  font-weight: 700;
+}
+
+.dev-row {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.dev-tools button {
+  border: 1px solid #cbd1d4;
+
+  background: #ffffff;
+  color: var(--text);
+
+  border-radius: 9px;
+
+  padding: 8px 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.dev-tools button:hover {
+  border-color: #8f9a9f;
+}
+
+.dev-tools p {
+  line-height: 1.5;
+}
+
+code {
+  padding: 2px 5px;
+
+  background: #f0f2f3;
+
+  border-radius: 5px;
+}
+
+/* =========================================================
+   TABLET / SMALLER WINDOWS
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .app-shell {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .game-card {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .board {
+    gap: 4px;
+  }
+
+  .digit-bank {
+    gap: 4px;
+  }
+
+  .expression {
+    gap: 2px;
+  }
+}
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (max-width: 520px) {
+  .app-shell {
+    padding: 20px 4px 36px;
+  }
+
+  .game-card {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  /* -------------------------------------------------------
+     G3 PHONE SIZE
+     ------------------------------------------------------- */
+
+  .board[data-digits="3"] {
+    --cell-width: 38px;
+    --cell-height: 42px;
+
+    --operator-width: 18px;
+    --operator-size: 1.35rem;
+  }
+
+  /* -------------------------------------------------------
+     G4 PHONE SIZE
+     ------------------------------------------------------- */
+
+  .board[data-digits="4"] {
+    --cell-width: 30px;
+    --cell-height: 42px;
+
+    --operator-width: 15px;
+    --operator-size: 1.15rem;
+  }
+
+  .board {
+    gap: 2px;
+
+    margin-bottom: 32px;
+  }
+
+  .board[data-digits="4"] .digit-bank {
+    gap: 3px;
+  }
+
+  .board[data-digits="4"] .expression {
+    gap: 1px;
+  }
+
+  .digit-tile,
+  .slot {
+    border-radius: 8px;
+
+    font-size: 1.05rem;
+  }
+
+  .equals {
+    height: var(--cell-height);
+
+    padding: 0 1px;
+
+    font-size: 1.7rem;
+  }
+
+  .side-panel {
+    gap: 12px;
+  }
+
+  .side-value {
+    margin-top: 6px;
+
+    font-size: 0.95rem;
+  }
+
+  .operator-bank {
+    gap: 7px;
+  }
+
+  .operator-tile {
+    min-width: 40px;
+    height: 40px;
+
+    border-radius: 9px;
+
+    font-size: 1.2rem;
+  }
+
+  .feedback-zone {
+    grid-template-rows: 52px;
+
+    margin-top: 14px;
+  }
+
+  .status {
+    height: 52px;
+  }
+
+  .help-row {
+    gap: 12px;
+
+    flex-wrap: wrap;
+  }
+}
+.op-slot.mirror-target {
+  background: var(--selected-bg);
+
+  border-color: var(--selected-line);
+
+  outline: 3px solid rgba(200, 155, 23, 0.18);
+}
+.op-slot.selected {
+  background: var(--selected-bg);
+
+  border-color: var(--selected-line);
+
+  outline: 3px solid rgba(200, 155, 23, 0.18);
+}
+.share-btn {
+  border-color: #a9c8b5;
+
+  background: #f1f8f4;
+  color: var(--accent-dark);
+}
+
+.share-btn:hover {
+  border-color: var(--accent);
+}
+
+.how-to-play-btn {
+  border: 0;
+
+  margin-top: 7px;
+  padding: 4px 6px;
+
+  background: transparent;
+  color: var(--muted);
+
+  font-size: 0.88rem;
+  font-weight: 700;
+
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  cursor: pointer;
+}
+
+.how-to-play-btn:hover {
+  color: var(--text);
+}
